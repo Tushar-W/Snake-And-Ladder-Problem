@@ -32,17 +32,25 @@ function checkOptions() {
 			fi
 			;;
 	esac
+	getPreviousPosition
+}
+
+function getPreviousPosition() {
+	if [ $playerPosition -gt 100 ];
+	then
+		playerPosition=$(( $playerPosition-$result ))
+	fi
 }
 
 function getWinningPosition() {
 	while [ $playerPosition != 100 ]
 	do
-		checkOptions
+				checkOptions
 	done
 }
 
-rollingDie
-echo $result
+#rollingDie
+#echo $result
 #start Playing first player
 echo "Player Position:" $playerPosition
 checkOptions
