@@ -25,14 +25,28 @@ function checkOptions() {
 			playerPosition=$(( $playerPosition + $( rollingDie ) ))
 			;;
 		$SNAKE)
-			if [ $playerPosition -ne 0 ];
+			playerPosition=$(( $playerPosition - $( rollingDie ) ))
+			if [ $playerPosition -lt 0 ];
 			then
-				playerPosition=$(( $playerPosition - $( rollingDie ) ))
-			else
 				playerPosition=0
 			fi
 			;;
 	esac
+}
+
+function getPreviousPosition() {
+	playerPosition=$(( $playerPosition - $(($result - 1)) ))
+}
+
+function getWinningPosition() {
+	while [ $playerPosition != 100 ]
+	do
+		if [ $playerPosition -gt 100 ];
+		then
+			getPreviousPosition
+		fi
+		checkOptions
+	done
 }
 
 rollingDie
@@ -40,4 +54,9 @@ echo $result
 #start Playing first player
 echo "Player Position:" $playerPosition
 checkOptions
+echo "Player Position:"$playerPosition
+#reach winning position
+getWinningPosition
+echo $result
+echo "Player Win.."
 echo "Player Position:"$playerPosition
