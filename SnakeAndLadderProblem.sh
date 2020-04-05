@@ -34,17 +34,9 @@ function checkOptions() {
 	esac
 }
 
-function getPreviousPosition() {
-	playerPosition=$(( $playerPosition - $(($result - 1)) ))
-}
-
 function getWinningPosition() {
 	while [ $playerPosition != 100 ]
 	do
-		if [ $playerPosition -gt 100 ];
-		then
-			getPreviousPosition
-		fi
 		checkOptions
 	done
 }
@@ -57,6 +49,5 @@ checkOptions
 echo "Player Position:"$playerPosition
 #reach winning position
 getWinningPosition
-echo $result
 echo "Player Win.."
 echo "Player Position:"$playerPosition
