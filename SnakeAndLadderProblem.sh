@@ -2,6 +2,8 @@
 
 echo "Welcome To Snake And Ladder Problem"
 #CONSTANTS
+PLAYER_1=0
+PLAYER_2=1
 WINNING_POSITION=100
 NO_PLAY=0
 LADDER=1
@@ -9,6 +11,9 @@ SNAKE=2
 #VARIABLE
 playerPosition=0
 diceCount=0
+playerOnePosition=0
+playerTwoPosition=0
+turn=0
 
 #roll the die
 function rollingDie() {
@@ -35,18 +40,57 @@ function checkOptions() {
 			fi
 			;;
 	esac
+	getPreviousPosition
 }
 
-function getWinningPosition() {
+function getPreviousPosition() {
+	if [ $playerPosition -gt $WINNING_POSITION ];
+	then
+		playerPosition=$(( $playerPosition - $result ))
+	fi
+}
+
+function playerTwo() {
+	playerPosition=$playerTwoPosition
+	rollingDie
+	checkOptions
+	playerTwoPosition=$playerPosition
+	turn=0
+	getWinningPlayer
+}
+
+function playerOne() {
+	playerPosition=$playerOnePosition
+	rollingDie
+	checkOptions
+	playerOnePosition=$playerPosition
+	turn=1
+	getWinningPlayer
+}
+
+function turnPlayer() {
+	if [ $turn -eq 0 ];
+	then
+		playerOne
+	else
+		playerTwo
+	fi
+}
+
+function getWinningPlayer() {
+	if [ $playerOnePosition -eq $WINNING_POSITION ];
+	then
+		echo "Player One Win ..."
+	elif [ $playerTwoPosition -eq $WINNING_POSITION ];
+	then
+		echo "Player Two Win..."
+	fi
+}
+
+function startGame() {
 	while [ $playerPosition != $WINNING_POSITION ]
 	do
-		if [ $playerPosition -gt $WINNING_POSITION ];
-		then
-			playerPosition=$(( $playerPosition - $result ))
-		fi
-		rollingDie
-		checkOptions
-		echo "Player Position:" $playerPosition
+		turnPlayer
 	done
 }
 
@@ -56,8 +100,6 @@ function getWinningPosition() {
 echo "Player Position:" $playerPosition
 checkOptions
 echo "Player Position:"$playerPosition
-#reach winning position
-getWinningPosition
-echo "Player Win.."
-echo "Player Position:"$playerPosition
+#Two player Game
+startGame
 echo "Total Dice Roll:"$diceCount
