@@ -2,15 +2,18 @@
 
 echo "Welcome To Snake And Ladder Problem"
 #CONSTANTS
+WINNING_POSITION=100
 NO_PLAY=0
 LADDER=1
 SNAKE=2
 #VARIABLE
 playerPosition=0
+diceCount=0
 
 #roll the die
 function rollingDie() {
 	result=$((RANDOM%6 + 1))
+	((diceCount++))
 	echo $result
 }
 
@@ -22,30 +25,28 @@ function checkOptions() {
 			playerPosition=$playerPosition
 			;;
 		$LADDER)
-			playerPosition=$(( $playerPosition + $( rollingDie ) ))
+			playerPosition=$(( $playerPosition + $result ))
 			;;
 		$SNAKE)
-			playerPosition=$(( $playerPosition - $( rollingDie ) ))
+			playerPosition=$(( $playerPosition - $result ))
 			if [ $playerPosition -lt 0 ];
 			then
 				playerPosition=0
 			fi
 			;;
 	esac
-	getPreviousPosition
-}
-
-function getPreviousPosition() {
-	if [ $playerPosition -gt 100 ];
-	then
-		playerPosition=$(( $playerPosition-$result ))
-	fi
 }
 
 function getWinningPosition() {
-	while [ $playerPosition != 100 ]
+	while [ $playerPosition != $WINNING_POSITION ]
 	do
-				checkOptions
+		if [ $playerPosition -gt $WINNING_POSITION ];
+		then
+			playerPosition=$(( $playerPosition - $result ))
+		fi
+		rollingDie
+		checkOptions
+		echo "Player Position:" $playerPosition
 	done
 }
 
@@ -59,3 +60,4 @@ echo "Player Position:"$playerPosition
 getWinningPosition
 echo "Player Win.."
 echo "Player Position:"$playerPosition
+echo "Total Dice Roll:"$diceCount
